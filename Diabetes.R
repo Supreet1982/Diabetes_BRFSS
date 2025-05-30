@@ -6,6 +6,7 @@ library(tidyverse)
 library(caret)
 library(corrplot)
 
+#Correlation
 
 cor_matrix <- cor(df, use = 'complete.obs')
 diag(cor_matrix) <- NA
@@ -18,4 +19,6 @@ top_corr <- as.data.frame(as.table(cor_matrix)) %>%
 head(top_corr, 10)
 
 corrplot(cor_matrix, method = 'color', tl.cex = 0.5)
+
+
 
