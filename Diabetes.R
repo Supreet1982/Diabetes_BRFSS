@@ -306,9 +306,16 @@ head(importance_c2,10)
 
 #Multinomial Regression
 
+library(nnet)
 
+set.seed(123)
 
+glm_1 <- multinom(as.factor(Diabetes_012) ~ as.factor(Smoker):as.factor(HighBP), 
+                  data = df.train)
 
+glm_1
 
-
+z <- summary(glm_1)$coefficients / summary(glm_1)$standard.errors
+p <- 2 * (1 - pnorm(abs(z)))
+print(round(p, 4))
 
