@@ -195,9 +195,118 @@ ggplot(xgb.tuned3)
 xgb.pred3 <- predict(xgb.tuned3, newdata = df_downsampled.test, type = 'raw')
 confusionMatrix(xgb.pred3, as.factor(df_downsampled.test$class))
 
-varImp(xgb.tuned3)
+ggplot(varImp(xgb.tuned3))
 
 ################################################################################
+
+#SHAP calculations
+
+X <- data.matrix(df_downsampled.train[ 
+  ,-which(names(df_downsampled.train)=='class')])
+
+model <- xgb.tuned3$finalModel
+
+# SHAP contributions for all classes
+# Predict SHAP with predcontrib = TRUE and reshape output
+
+shap_array <- predict(model, X, predcontrib = TRUE, reshape = TRUE)
+str(shap_array)
+dim(shap_array)
+
+# Choose class (1 = class 0, 2 = class 1, 3 = class 2)
+
+class_index <- 1
+shap_matrix <- shap_array[[class_index]]
+shap_matrix
+X <- data.matrix(df_downsampled.train
+                 [, -which(names(df_downsampled.train) == "class")])
+colnames(shap_matrix) <- c(colnames(X), 'BIAS')
+
+# Remove BIAS term (assume it's the last column)
+
+feature_names <- colnames(shap_matrix)[-ncol(shap_matrix)]
+shap_df <- as.data.frame(shap_matrix)[, feature_names]
+
+feature_names <- colnames(shap_df)[-ncol(shap_df)]  # exclude bias
+importance <- data.frame(
+  Feature = feature_names,
+  MeanAbsSHAP = apply(abs(shap_df[, feature_names]), 2, mean)
+)
+library(ggplot2)
+
+ggplot(head(importance, 20), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 20 SHAP Features for Class 0",
+       x = "Feature", y = "Mean Absolute SHAP Value") +
+  theme_minimal()
+
+importance
+
+################################################################################
+
+class_index <- 2
+shap_matrix <- shap_array[[class_index]]
+shap_matrix
+X <- data.matrix(df_downsampled.train
+                 [, -which(names(df_downsampled.train) == "class")])
+colnames(shap_matrix) <- c(colnames(X), 'BIAS')
+
+# Remove BIAS term (assume it's the last column)
+
+feature_names <- colnames(shap_matrix)[-ncol(shap_matrix)]
+shap_df <- as.data.frame(shap_matrix)[, feature_names]
+
+feature_names <- colnames(shap_df)[-ncol(shap_df)]  # exclude bias
+importance <- data.frame(
+  Feature = feature_names,
+  MeanAbsSHAP = apply(abs(shap_df[, feature_names]), 2, mean)
+)
+library(ggplot2)
+
+ggplot(head(importance, 20), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 20 SHAP Features for Class 1",
+       x = "Feature", y = "Mean Absolute SHAP Value") +
+  theme_minimal()
+
+importance
+
+################################################################################
+
+class_index <- 3
+shap_matrix <- shap_array[[class_index]]
+shap_matrix
+X <- data.matrix(df_downsampled.train
+                 [, -which(names(df_downsampled.train) == "class")])
+colnames(shap_matrix) <- c(colnames(X), 'BIAS')
+
+# Remove BIAS term (assume it's the last column)
+
+feature_names <- colnames(shap_matrix)[-ncol(shap_matrix)]
+shap_df <- as.data.frame(shap_matrix)[, feature_names]
+
+feature_names <- colnames(shap_df)[-ncol(shap_df)]  # exclude bias
+importance <- data.frame(
+  Feature = feature_names,
+  MeanAbsSHAP = apply(abs(shap_df[, feature_names]), 2, mean)
+)
+library(ggplot2)
+
+ggplot(head(importance, 20), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 20 SHAP Features for Class 2",
+       x = "Feature", y = "Mean Absolute SHAP Value") +
+  theme_minimal()
+
+importance
+
+################################################################################
+
+
+
 
 
 
