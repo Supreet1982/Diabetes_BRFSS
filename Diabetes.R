@@ -213,95 +213,94 @@ shap_array <- predict(model, X, predcontrib = TRUE, reshape = TRUE)
 str(shap_array)
 dim(shap_array)
 
+################################################################################
+
 # Choose class (1 = class 0, 2 = class 1, 3 = class 2)
-
 class_index <- 1
-shap_matrix <- shap_array[[class_index]]
-shap_matrix
+shap_matrix_c0 <- shap_array[[class_index]]
+shap_matrix_c0
 X <- data.matrix(df_downsampled.train
                  [, -which(names(df_downsampled.train) == "class")])
-colnames(shap_matrix) <- c(colnames(X), 'BIAS')
+colnames(shap_matrix_c0) <- c(colnames(X), 'BIAS')
 
 # Remove BIAS term (assume it's the last column)
 
-feature_names <- colnames(shap_matrix)[-ncol(shap_matrix)]
-shap_df <- as.data.frame(shap_matrix)[, feature_names]
+feature_names_c0 <- colnames(shap_matrix_c0)[-ncol(shap_matrix_c0)]
+shap_df_c0 <- as.data.frame(shap_matrix_c0)[, feature_names_c0]
 
-feature_names <- colnames(shap_df)[-ncol(shap_df)]  # exclude bias
-importance <- data.frame(
-  Feature = feature_names,
-  MeanAbsSHAP = apply(abs(shap_df[, feature_names]), 2, mean)
+importance_c0 <- data.frame(
+  Feature = feature_names_c0,
+  MeanAbsSHAP = apply(abs(shap_df_c0[, feature_names_c0]), 2, mean)
 )
+
 library(ggplot2)
 
-ggplot(head(importance, 20), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
+ggplot(head(importance_c0, 10), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
   geom_col(fill = "steelblue") +
   coord_flip() +
-  labs(title = "Top 20 SHAP Features for Class 0",
+  labs(title = "Top 10 SHAP Features for Class 0",
        x = "Feature", y = "Mean Absolute SHAP Value") +
   theme_minimal()
 
-importance
+head(importance_c0,10)
 
 ################################################################################
 
-class_index <- 2
-shap_matrix <- shap_array[[class_index]]
-shap_matrix
+class_index_c1 <- 2
+shap_matrix_c1 <- shap_array[[class_index_c1]]
+shap_matrix_c1
 X <- data.matrix(df_downsampled.train
                  [, -which(names(df_downsampled.train) == "class")])
-colnames(shap_matrix) <- c(colnames(X), 'BIAS')
+colnames(shap_matrix_c1) <- c(colnames(X), 'BIAS')
 
 # Remove BIAS term (assume it's the last column)
 
-feature_names <- colnames(shap_matrix)[-ncol(shap_matrix)]
-shap_df <- as.data.frame(shap_matrix)[, feature_names]
+feature_names_c1 <- colnames(shap_matrix_c1)[-ncol(shap_matrix_c1)]
+shap_df_c1 <- as.data.frame(shap_matrix_c1)[, feature_names_c1]
 
-feature_names <- colnames(shap_df)[-ncol(shap_df)]  # exclude bias
-importance <- data.frame(
-  Feature = feature_names,
-  MeanAbsSHAP = apply(abs(shap_df[, feature_names]), 2, mean)
+importance_c1 <- data.frame(
+  Feature = feature_names_c1,
+  MeanAbsSHAP = apply(abs(shap_df_c1[, feature_names_c1]), 2, mean)
 )
 library(ggplot2)
 
-ggplot(head(importance, 20), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
+ggplot(head(importance_c1, 10), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
   geom_col(fill = "steelblue") +
   coord_flip() +
-  labs(title = "Top 20 SHAP Features for Class 1",
+  labs(title = "Top 10 SHAP Features for Class 1",
        x = "Feature", y = "Mean Absolute SHAP Value") +
   theme_minimal()
 
-importance
+head(importance_c1, 10)
 
 ################################################################################
 
-class_index <- 3
-shap_matrix <- shap_array[[class_index]]
-shap_matrix
+class_index_c2 <- 3
+shap_matrix_c2 <- shap_array[[class_index_c2]]
+shap_matrix_c2
 X <- data.matrix(df_downsampled.train
                  [, -which(names(df_downsampled.train) == "class")])
-colnames(shap_matrix) <- c(colnames(X), 'BIAS')
+colnames(shap_matrix_c2) <- c(colnames(X), 'BIAS')
 
 # Remove BIAS term (assume it's the last column)
 
-feature_names <- colnames(shap_matrix)[-ncol(shap_matrix)]
-shap_df <- as.data.frame(shap_matrix)[, feature_names]
+feature_names_c2 <- colnames(shap_matrix_c2)[-ncol(shap_matrix_c2)]
+shap_df_c2 <- as.data.frame(shap_matrix_c2)[, feature_names_c2]
 
-feature_names <- colnames(shap_df)[-ncol(shap_df)]  # exclude bias
-importance <- data.frame(
-  Feature = feature_names,
-  MeanAbsSHAP = apply(abs(shap_df[, feature_names]), 2, mean)
+importance_c2 <- data.frame(
+  Feature = feature_names_c2,
+  MeanAbsSHAP = apply(abs(shap_df_c2[, feature_names_c2]), 2, mean)
 )
 library(ggplot2)
 
-ggplot(head(importance, 20), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
+ggplot(head(importance_c2, 10), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
   geom_col(fill = "steelblue") +
   coord_flip() +
-  labs(title = "Top 20 SHAP Features for Class 2",
+  labs(title = "Top 10 SHAP Features for Class 2",
        x = "Feature", y = "Mean Absolute SHAP Value") +
   theme_minimal()
 
-importance
+head(importance_c2,10)
 
 ################################################################################
 
