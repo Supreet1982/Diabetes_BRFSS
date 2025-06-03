@@ -24,7 +24,7 @@ top_corr <- as.data.frame(as.table(cor_matrix)) %>%
 
 head(top_corr, 10)
 
-corrplot(cor_matrix, method = 'color', tl.cex = 0.5)
+corrplot(cor_matrix, method = 'color', tl.cex = 0.8)
 
 #Split
 
@@ -195,7 +195,7 @@ ggplot(xgb.tuned3)
 xgb.pred3 <- predict(xgb.tuned3, newdata = df_downsampled.test, type = 'raw')
 confusionMatrix(xgb.pred3, as.factor(df_downsampled.test$class))
 
-ggplot(varImp(xgb.tuned3))
+ggplot(varImp(xgb.tuned3, top =10))
 
 ################################################################################
 
@@ -235,10 +235,10 @@ importance_c0 <- data.frame(
 
 library(ggplot2)
 
-ggplot(head(importance_c0, 10), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
+ggplot(head(importance_c0, 5), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
   geom_col(fill = "steelblue") +
   coord_flip() +
-  labs(title = "Top 10 SHAP Features for Class 0",
+  labs(title = "Top 5 SHAP Features for Class 0",
        x = "Feature", y = "Mean Absolute SHAP Value") +
   theme_minimal()
 
@@ -264,10 +264,10 @@ importance_c1 <- data.frame(
 )
 library(ggplot2)
 
-ggplot(head(importance_c1, 10), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
+ggplot(head(importance_c1, 5), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
   geom_col(fill = "steelblue") +
   coord_flip() +
-  labs(title = "Top 10 SHAP Features for Class 1",
+  labs(title = "Top 5 SHAP Features for Class 1",
        x = "Feature", y = "Mean Absolute SHAP Value") +
   theme_minimal()
 
@@ -293,10 +293,10 @@ importance_c2 <- data.frame(
 )
 library(ggplot2)
 
-ggplot(head(importance_c2, 10), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
+ggplot(head(importance_c2, 5), aes(x = reorder(Feature, MeanAbsSHAP), y = MeanAbsSHAP)) +
   geom_col(fill = "steelblue") +
   coord_flip() +
-  labs(title = "Top 10 SHAP Features for Class 2",
+  labs(title = "Top 5 SHAP Features for Class 2",
        x = "Feature", y = "Mean Absolute SHAP Value") +
   theme_minimal()
 
